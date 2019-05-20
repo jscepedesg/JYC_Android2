@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Bacground"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView_vista_clientes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CLIENTES"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+    <SearchView
+        android:id="@+id/search_vista_cliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/listview_vista_cliente"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
