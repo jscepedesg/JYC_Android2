@@ -3,18 +3,22 @@ package sebastian.ing.jyc2.pedidos;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import sebastian.ing.jyc2.Estructuras.Cliente;
 import sebastian.ing.jyc2.Estructuras.FacturaRelacionalProducto;
 import sebastian.ing.jyc2.R;
 import sebastian.ing.jyc2.Utilidades.ConexionSQLiteHelper;
@@ -34,6 +38,8 @@ public class Lista_Productos_Factura extends AppCompatActivity
     private ConexionSQLiteHelper conn;
     private final double iva = 1.19;
     private static double total=0;
+    private Cliente cliente;
+
 
 
 
@@ -41,6 +47,14 @@ public class Lista_Productos_Factura extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_productos_factura);
+
+        Bundle objetoenviado = getIntent().getExtras();
+        cliente=null;
+
+        if (objetoenviado!=null)
+        {
+            cliente = (Cliente) objetoenviado.getSerializable("cliente_factura_consulta");
+        }
 
         conn = new ConexionSQLiteHelper(this, Utilidades.DATABASE_NAME,null,Utilidades.DATABASE_VERSION);
         listView3 = (ListView) findViewById(R.id.listView_lista_producto_factura);
@@ -74,7 +88,8 @@ public class Lista_Productos_Factura extends AppCompatActivity
                 finish();*/
                 //id_pro_facturar = listaProducto.get(pos).getCod_p();
                 //new CuadroDialogo(context,Hacer_pedido.this);
-                createSimpleDialog();
+                Log.d("Codigos:", String.valueOf(listafactura.get(pos).getId_pro())+" "+String.valueOf(listafactura.get(pos).getId_clie()));
+                createSimpleDialog(listafactura.get(pos).getId_pro(),listafactura.get(pos).getId_clie()).show();
             }
         });
 
@@ -88,14 +103,14 @@ public class Lista_Productos_Factura extends AppCompatActivity
         //SELECT p.nom_Pro, p.Valor_sin_iva, f.cantidad
         //FROM factura f INNER JOIN producto p ON(p.Id_Pro=f.Id_Pro3)
         //WHERE f.id_factura= 1
-        Cursor cursor = db.rawQuery("SELECT p." +Utilidades.CAMPO_NOMBRE_PRO+", p."+Utilidades.CAMPO_PRECIO_PRO+", f."+Utilidades.CAMPO_CANTIDAD_FAC+
+        Cursor cursor = db.rawQuery("SELECT p."+Utilidades.CAMPO_ID_PRO+", f."+Utilidades.CAMPO_ID_CLIE1+", p." +Utilidades.CAMPO_NOMBRE_PRO+", p."+Utilidades.CAMPO_PRECIO_PRO+", f."+Utilidades.CAMPO_CANTIDAD_FAC+
                 " FROM "+Utilidades.TABLA_FACTURA+" f INNER JOIN "+Utilidades.TABLA_PRODUCTO+" p ON(p."+Utilidades.CAMPO_ID_PRO+"=f."+Utilidades.CAMPO_ID_PRO3+
-                ") WHERE f."+Utilidades.CAMPO_ID_FACTURA+" = 1" ,null);
+                ") WHERE f."+Utilidades.CAMPO_ID_CLIE1+" = "+cliente.getId_c() ,null);
 
         while (cursor.moveToNext())
         {
-            listafactura.add(new FacturaRelacionalProducto(cursor.getString(0),cursor.getDouble(1),cursor.getInt(2),((Math.round(cursor.getDouble(1)*iva))*cursor.getInt(2))));
-            total+=((Math.round(cursor.getDouble(1)*iva))*cursor.getInt(2));
+            listafactura.add(new FacturaRelacionalProducto(cursor.getInt(0),cursor.getInt(1),cursor.getString(2),cursor.getDouble(3),cursor.getInt(4),((Math.round(cursor.getDouble(3)*iva))*cursor.getInt(4))));
+            total+=((Math.round(cursor.getDouble(3)*iva))*cursor.getInt(4));
         }
 
         setObtenerLista();
@@ -111,7 +126,7 @@ public class Lista_Productos_Factura extends AppCompatActivity
         }
     }
 
-    public AlertDialog createSimpleDialog() {
+    public AlertDialog createSimpleDialog(final int id_pro, final int id_cliete) {
         Context context = this;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -121,6 +136,7 @@ public class Lista_Productos_Factura extends AppCompatActivity
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                setEliminarProductoFactura(id_pro,id_cliete);
                                 //listener.onPossitiveButtonClick();
                             }
                         })
@@ -133,5 +149,24 @@ public class Lista_Productos_Factura extends AppCompatActivity
                         });
 
         return builder.create();
+    }
+
+    public void setEliminarProductoFactura(int id_pro, int id_cliete)
+    {
+        SQLiteDatabase dbe = conn.getWritableDatabase();
+        dbe.execSQL("delete from "+ Utilidades.TABLA_FACTURA+ " where "+Utilidades.CAMPO_ID_PRO3+" = "
+                +id_pro+" AND "+Utilidades.CAMPO_ID_CLIE1+" = "+id_cliete);
+        dbe.close();
+        setListaFactura();
+    }
+
+    public void setListaFactura()
+    {
+        Intent i = new Intent(this, Lista_Productos_Factura.class);
+        Bundle bundle= new Bundle();
+        bundle.putSerializable("cliente_factura_consulta",cliente);
+        i.putExtras(bundle);
+        startActivity(i);
+        finish();
     }
 }

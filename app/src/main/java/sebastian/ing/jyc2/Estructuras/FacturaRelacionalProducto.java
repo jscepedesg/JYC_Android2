@@ -8,17 +8,36 @@ import java.io.Serializable;
 
 public class FacturaRelacionalProducto implements Serializable
 {
+    private int id_pro;
+    private int id_clie;
     private String nombre_producto;
     private double precio_unitario;
     private  int cantidad;
     private double total_por_producto;
 
-    public FacturaRelacionalProducto(String nombre_producto, double precio_unitario, int cantidad, double total_por_producto)
-    {
+    public FacturaRelacionalProducto(int id_pro, int id_clie, String nombre_producto, double precio_unitario, int cantidad, double total_por_producto) {
+        this.id_pro = id_pro;
+        this.id_clie = id_clie;
         this.nombre_producto = nombre_producto;
         this.precio_unitario = precio_unitario;
         this.cantidad = cantidad;
         this.total_por_producto = total_por_producto;
+    }
+
+    public int getId_pro() {
+        return id_pro;
+    }
+
+    public void setId_pro(int id_pro) {
+        this.id_pro = id_pro;
+    }
+
+    public int getId_clie() {
+        return id_clie;
+    }
+
+    public void setId_clie(int id_clie) {
+        this.id_clie = id_clie;
     }
 
     public String getNombre_producto() {

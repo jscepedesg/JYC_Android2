@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,10 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
     private int id_pro_facturar, id_cliente_factura;
 
     private Factura factura;
+    private Cliente cliente;
+
+    private RadioButton RBfacturado,RBcerrado;
+    private boolean estadoradioBtnfactura,estadoradioBtncerrado;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -57,10 +62,12 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
 
         nombre_cliente_hacer=(TextView) findViewById(R.id.nombre_cliente_hacer_factura);
         numero_de_factura=(TextView) findViewById(R.id.texto_numero_hacer_factura);
+        RBfacturado = (RadioButton) findViewById(R.id.radioButton);
+        RBcerrado = (RadioButton) findViewById(R.id.radioButton2);
         context = this;
 
         Bundle objetoenviado = getIntent().getExtras();
-        Cliente cliente=null;
+        cliente=null;
 
         if (objetoenviado!=null)
         {
@@ -217,6 +224,9 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
     public void setLista_Productos_Factura_Layout(View view)
     {
         Intent i = new Intent(this, Lista_Productos_Factura.class);
+        Bundle bundle= new Bundle();
+        bundle.putSerializable("cliente_factura_consulta",cliente);
+        i.putExtras(bundle);
         startActivity(i);
     }
 
