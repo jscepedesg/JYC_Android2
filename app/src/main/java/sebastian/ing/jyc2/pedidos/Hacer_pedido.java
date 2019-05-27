@@ -132,7 +132,7 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
         int numero_de_facturas1 = getObtenerNumeroFactura()+1;
         numero_de_factura.setText("Factura numero: "+numero_de_facturas1);
 
-        RBcerrado.setChecked(true);
+        RBfacturado.setChecked(true);
 
     }
 
