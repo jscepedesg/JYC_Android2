@@ -27,9 +27,9 @@
         </activity>
         <activity android:name=".pedidos.Pedido">
         </activity>
-        <activity android:name=".Estadistica">
+        <activity android:name=".estadistica.Estadistica">
         </activity>
-        <activity android:name=".Facturar">
+        <activity android:name=".facturar.Facturar">
         </activity>
         <activity android:name=".crear_clientes.Cliente_Int">
         </activity>
@@ -48,6 +48,8 @@
         <activity android:name=".pedidos.Hacer_pedido">
         </activity>
         <activity android:name=".pedidos.Lista_Productos_Factura">
+        </activity>
+        <activity android:name=".estadistica.Estadistica_dias">
         </activity>
 
     </application>

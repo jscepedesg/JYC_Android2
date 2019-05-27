@@ -182,12 +182,12 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
     }
 
     public int getObtenerNumeroFactura()
-    {
-        SQLiteDatabase dbe = conn.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.longForQuery(dbe, "SELECT COUNT(*) FROM "+Utilidades.TABLA_REGISTRO, null);
-        dbe.close();
-        return numRows;
-    }
+{
+    SQLiteDatabase dbe = conn.getReadableDatabase();
+    int numRows = (int) DatabaseUtils.longForQuery(dbe, "SELECT COUNT(*) FROM "+Utilidades.TABLA_REGISTRO, null);
+    dbe.close();
+    return numRows;
+}
 
     public String setFecha()
     {
@@ -280,6 +280,28 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
         else
         {
             Log.d("Activo: ","Esta activo cerrado");
+            try
+            {
+
+                SQLiteDatabase db= conn.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put(Utilidades.CAMPO_ID_CLIENTE_CERRADO,id_cliente_factura);
+
+                Long id_resultado = db.insert(Utilidades.TABLA_CLIENTES_CERRADOS,Utilidades.CAMPO_ID_CLIENTE_CERRADO,values);
+                Toast.makeText(getApplicationContext(),"Id resgistro: "+id_resultado, Toast.LENGTH_SHORT).show();
+                db.close();
+
+                Intent i = new Intent(this, Pedido.class);
+                startActivity(i);
+                finish();
+
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(),"Error BDD", Toast.LENGTH_SHORT).show();
+                e.getMessage();
+            }
+
         }
     }
 

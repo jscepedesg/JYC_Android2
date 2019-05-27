@@ -81,4 +81,10 @@ public class Utilidades
     public static final String CAMPO_ID_VENDEDOR_REGISTRO="id_vendedor_registro";
     public static final String CREAR_TABLA_REGISTRO=
             "CREATE TABLE "+TABLA_REGISTRO+" ("+CAMPO_ID_REGISTRO+" INTEGER PRIMARY KEY AUTOINCREMENT, "+CAMPO_ID_CLIENTE_REGISTRO+" INTEGER, "+CAMPO_ID_VENDEDOR_REGISTRO+" INTEGER)";
+
+    //Constantes tabla Clientes cerrados
+    public static final String TABLA_CLIENTES_CERRADOS="cerrados";
+    public static final String CAMPO_ID_CLIENTE_CERRADO="id_cliente_cerrado";
+    public static final String CREAR_TABLA_CLIENTES_CERRADOS=
+            "CREATE TABLE "+TABLA_CLIENTES_CERRADOS+" ("+CAMPO_ID_CLIENTE_CERRADO+" INTEGER)";
 }

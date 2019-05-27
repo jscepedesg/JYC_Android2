@@ -12,6 +12,8 @@ import android.widget.Toast;
 import sebastian.ing.jyc2.Utilidades.ConexionSQLiteHelper;
 import sebastian.ing.jyc2.Utilidades.Utilidades;
 import sebastian.ing.jyc2.crear_clientes.Cliente_Int;
+import sebastian.ing.jyc2.estadistica.Estadistica_dias;
+import sebastian.ing.jyc2.facturar.Facturar;
 import sebastian.ing.jyc2.pedidos.Pedido;
 import sebastian.ing.jyc2.vistaBasededatos.Vista_Base_Datos;
 
@@ -40,7 +42,7 @@ public class Inicio extends AppCompatActivity
 
     public void setEstadistica(View view)
     {
-        Intent i = new Intent(this, Estadistica.class);
+        Intent i = new Intent(this, Estadistica_dias.class);
         startActivity(i);
     }
 
