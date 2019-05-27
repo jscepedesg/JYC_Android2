@@ -63,9 +63,10 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
         nombre_cliente_hacer=(TextView) findViewById(R.id.nombre_cliente_hacer_factura);
         numero_de_factura=(TextView) findViewById(R.id.texto_numero_hacer_factura);
         RBfacturado = (RadioButton) findViewById(R.id.radioButton);
+        estadoradioBtnfactura=RBfacturado.isChecked();
         RBcerrado = (RadioButton) findViewById(R.id.radioButton2);
+        estadoradioBtncerrado = RBcerrado.isChecked();
         context = this;
-
         Bundle objetoenviado = getIntent().getExtras();
         cliente=null;
 
@@ -130,6 +131,8 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
         Log.d("Cantidad registros re: ", String.valueOf(getObtenerNumeroFactura()));
         int numero_de_facturas1 = getObtenerNumeroFactura()+1;
         numero_de_factura.setText("Factura numero: "+numero_de_facturas1);
+
+        RBcerrado.setChecked(true);
 
     }
 
@@ -230,4 +233,63 @@ public class Hacer_pedido extends AppCompatActivity implements CuadroDialogo.Fin
         startActivity(i);
     }
 
+    public void setTerminarFactura(View view)
+    {
+        if (RBfacturado.isChecked())
+        {
+            Log.d("Activo: ", "Esta activo facturado");
+
+            Log.d("Numero de registros", String.valueOf(optenerEstadoFactura()));
+
+            if(optenerEstadoFactura()>0)
+            {
+                Log.d("Hacer el:","Registro");
+                Log.d("Inserto: ", String.valueOf(id_cliente_factura)+" "+ MainActivity.setOptenerEstadoUsuario(Hacer_pedido.this));
+                try
+                {
+
+                    SQLiteDatabase db= conn.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put(Utilidades.CAMPO_ID_CLIENTE_REGISTRO,id_cliente_factura);
+                    values.put(Utilidades.CAMPO_ID_VENDEDOR_REGISTRO,MainActivity.setOptenerEstadoUsuario(Hacer_pedido.this));
+
+                    Long id_resultado = db.insert(Utilidades.TABLA_REGISTRO,Utilidades.CAMPO_ID_CLIENTE_REGISTRO,values);
+                    Toast.makeText(getApplicationContext(),"Id resgistro: "+id_resultado, Toast.LENGTH_SHORT).show();
+                    db.close();
+
+                    Intent i = new Intent(this, Pedido.class);
+                    startActivity(i);
+                    finish();
+
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),"Error BDD", Toast.LENGTH_SHORT).show();
+                    e.getMessage();
+                }
+            }
+            else
+            {
+                Log.d(" No Hace el:","Registro");
+                Toast.makeText(getApplicationContext(),"No ha facturado ningun producto", Toast.LENGTH_SHORT).show();
+            }
+
+
+
+        }
+        else
+        {
+            Log.d("Activo: ","Esta activo cerrado");
+        }
+    }
+
+    public int optenerEstadoFactura()
+    {
+        int numFactura = (getObtenerNumeroFactura()+1);
+        SQLiteDatabase dbe = conn.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.longForQuery(dbe, "SELECT COUNT(*) FROM "+Utilidades.TABLA_FACTURA+" WHERE "+Utilidades.CAMPO_ID_CLIE1+" = "+id_cliente_factura+ " AND "+Utilidades.CAMPO_ID_FACTURA
+                +" = "+ numFactura , null);
+        dbe.close();
+        return numRows;
+    }
 }

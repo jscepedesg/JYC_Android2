@@ -17,7 +17,7 @@ public class MensajeEnaviar extends AsyncTask<String, Void, Void>
     private Socket socketc;
     private DataOutputStream flujo;
     private PrintWriter pw;
-    private String ip = "192.168.1.90";
+    private String ip = "192.168.1.70";
 
     @Override
     protected Void doInBackground(String... voids)
